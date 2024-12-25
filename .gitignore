@@ -1,0 +1,8 @@
+.venv
+app/__pycache__
+app/routes/__pycache__
+.devdbrc
+instance/*
+migrations/*
+__pycache__
+config.py
