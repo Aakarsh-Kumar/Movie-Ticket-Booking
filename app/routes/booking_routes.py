@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, Booking, Movie,Screen, Food, WaitingList
-import pickle
+from pickle import loads, dumps
 
 booking_routes = Blueprint('booking_routes', __name__)
 
@@ -11,22 +11,25 @@ def create_booking():
     movie_id = data.get('movie_id')
     seats_requested = int(data.get('seats_requested'))
     food_items = data.get('food_items', []) 
-    total_seats = Screen.query.get(Movie.query.get(movie_id).screen_id).seats
-    booked_seats = Movie.query.get(movie_id).booking_count
-    if total_seats - booked_seats < seats_requested:
+    total_seats = len(loads(Screen.query.get(Movie.query.get(movie_id).screen_id).seats))
+    booked_seats_count = len(loads(Movie.query.get(movie_id).booked_seats))
+    if total_seats - booked_seats_count < seats_requested:
         add_waiting()
         return jsonify({'message': 'Seats not available. Added to waiting list'})
-    alloted_seats = [allot_seats for allot_seats in range(booked_seats+1, booked_seats+seats_requested+1)]
-    new_booking = Booking(user_id=user_id, movie_id=movie_id, seats_booked=pickle.dumps(alloted_seats), food_items=pickle.dumps(food_items))
-    Movie.query.get(movie_id).booking_count += seats_requested
+    alloted_seats = allot_seats(movie_id, seats_requested)
+    new_booking = Booking(user_id=user_id, movie_id=movie_id, seats_booked=dumps(alloted_seats), food_items=dumps(food_items))
     db.session.add(new_booking)
+    
+    movie = Movie.query.get(movie_id)
+    movie.booked_seats = dumps(loads(movie.booked_seats) + alloted_seats)
     db.session.commit()
+    
     return jsonify({
         'id': new_booking.id,
         'user_id': new_booking.user_id,
         'movie_id': new_booking.movie_id,
-        'seats_booked': pickle.loads(new_booking.seats_booked),
-        'food_items': pickle.loads(new_booking.food_items),
+        'seats_booked': loads(new_booking.seats_booked),
+        'food_items': loads(new_booking.food_items),
         'booked_at': new_booking.booked_at
     })
 
@@ -48,7 +51,7 @@ def add_waiting():
     movie_id = data.get('movie_id')
     seats_requested = int(data.get('seats_requested'))
     food_items = data.get('food_items', [])
-    new_waiting = WaitingList(user_id=user_id, movie_id=movie_id, seats_requested=seats_requested, food_items=pickle.dumps(food_items))
+    new_waiting = WaitingList(user_id=user_id, movie_id=movie_id, seats_requested=seats_requested, food_items=dumps(food_items))
     db.session.add(new_waiting)
     db.session.commit()
     return jsonify({
@@ -56,5 +59,17 @@ def add_waiting():
         'user_id': new_waiting.user_id,
         'movie_id': new_waiting.movie_id,
         'seats_requested': new_waiting.seats_requested,
-        'food_items': pickle.loads(new_waiting.food_items)
+        'food_items': loads(new_waiting.food_items)
     })
+
+def allot_seats(movie_id, seats_requested):
+    movie = Movie.query.get(movie_id)
+    screen = Screen.query.get(movie.screen_id)
+    booked_seats = loads(movie.booked_seats)
+    alloted_seats = []
+    for seat in range(1, len(loads(screen.seats)) + 1):
+        if seat not in booked_seats:
+            alloted_seats.append(seat)
+            if len(alloted_seats) == seats_requested:
+                break
+    return alloted_seats

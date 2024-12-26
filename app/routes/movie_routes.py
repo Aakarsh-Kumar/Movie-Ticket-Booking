@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from app.models import db, Movie
 import datetime
+from pickle import loads, dumps
 
 movie_routes = Blueprint('movie_routes', __name__)
 
@@ -15,7 +16,7 @@ def get_movies():
             'duration':movie.duration,
             'screen_id':movie.screen_id,
             'show_time':movie.show_time,
-            'booking_count':movie.booking_count
+            'booked_seats':loads(movie.booked_seats)
         }
         for movie in movies
     ])
@@ -39,7 +40,7 @@ def add_movie():
         'duration': new_movie.duration,
         'screen_id': new_movie.screen_id,
         'show_time': new_movie.show_time,
-        'booking_count': new_movie.booking_count
+        'booked_seats': loads(new_movie.booked_seats)
     })
 
 @movie_routes.route('/movies/<int:id>', methods=['GET'])
@@ -52,5 +53,6 @@ def get_movie(id):
         'duration': movie.duration,
         'screen_id': movie.screen_id,
         'show_time': movie.show_time,
-        'booking_count': movie.booking_count
+        'booked_seats':loads(movie.booked_seats),
+        'seats':loads(movie.screen.seats)
     })

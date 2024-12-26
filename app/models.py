@@ -1,6 +1,6 @@
 from . import db
 from datetime import datetime
-
+from pickle import dumps
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,7 +20,7 @@ class Screen(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(50), nullable=False)
     price = db.Column(db.Integer, nullable=False)
-    seats = db.Column(db.Integer, nullable=False)
+    seats = db.Column(db.PickleType, nullable=False)
     theater_id = db.Column(db.Integer, db.ForeignKey('theater.id'), nullable=False)
     movies = db.relationship('Movie', backref='screen', lazy=True)
 
@@ -31,7 +31,7 @@ class Movie(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     screen_id = db.Column(db.Integer, db.ForeignKey('screen.id'), nullable=False)
     show_time = db.Column(db.DateTime, nullable=False)
-    booking_count = db.Column(db.Integer, default=0)
+    booked_seats = db.Column(db.PickleType, default=dumps([]))
     bookings = db.relationship('Booking', backref='movie', lazy=True)
     waiting_list = db.relationship('WaitingList', backref='movie', lazy=True)
 
