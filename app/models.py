@@ -41,7 +41,7 @@ class Booking(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)
     seats_booked = db.Column(db.PickleType, nullable=False)
-    food_items = db.Column(db.PickleType, nullable=True)
+    food_items = db.Column(db.PickleType,  db.ForeignKey('food.id'),default=dumps([]))
     booked_at = db.Column(db.DateTime, default=datetime.now)
 
 class WaitingList(db.Model):
@@ -57,4 +57,5 @@ class Food(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    bookings = db.relationship('Booking', backref='food', lazy=True)
 
