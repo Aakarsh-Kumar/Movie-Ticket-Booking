@@ -44,9 +44,9 @@ def get_amount():
     food_total = sum([Food.query.get(food_item).price for food_item in food_items])
     screen_type = Movie.query.get(movie_id).screen.type.lower().strip()
     if screen_type == 'gold':
-        food_total -= food_total*0.05
-    elif screen_type == 'imax':
         food_total -= food_total*0.1
+    elif screen_type == 'imax':
+        food_total -= food_total*0.05
 
     total_amount = ticket_total + food_total
     return jsonify({'total_amount': total_amount, 'ticket_total': ticket_total, 'food_total': food_total})
