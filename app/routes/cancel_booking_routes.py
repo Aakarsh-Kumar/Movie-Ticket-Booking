@@ -38,8 +38,6 @@ def update_waiting_list(movie):
                 'seats_requested': waiting_seats,
                 'food_items': waiting_list.food_items
             })
-            #we need to create a booking with the details in the waiting list
-            # new_booking = Booking(user_id=waiting_list.user_id, movie_id=waiting_list.movie_id, seats_booked=, food_items=waiting_list.food_items)
     db.session.commit()
     
     
