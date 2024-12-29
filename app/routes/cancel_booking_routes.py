@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from app.models import db, Booking
 from pickle import loads,dumps
 from requests import post
+from datetime import datetime
 
 cancel_booking_routes = Blueprint('cancel_booking_routes', __name__)
 
@@ -12,8 +13,17 @@ def cancel_booking():
     booking = Booking.query.get(booking_id)
     if booking is None:
         return jsonify({'message': 'Booking not found'}), 404
-    #update the movie's booked seats
+    #checking time
+
+
+
     movie = booking.movie
+
+    #checking time window
+    show_time = movie.show_time
+    if not (show_time-datetime.now()).total_seconds()>1800:
+        return jsonify({'message': 'Cancellation closed'})
+    #update the movie's booked seats
     booked_seats = loads(movie.booked_seats)
     for seat in loads(booking.seats_booked):
         booked_seats.remove(seat)

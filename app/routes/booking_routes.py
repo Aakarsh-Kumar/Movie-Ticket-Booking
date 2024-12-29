@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, Booking, Movie,Screen, Food, WaitingList
 from pickle import loads, dumps
+from datetime import datetime
 
 booking_routes = Blueprint('booking_routes', __name__)
 
@@ -11,6 +12,10 @@ def create_booking():
     movie_id = data.get('movie_id')
     seats_requested = int(data.get('seats_requested'))
     food_items = data.get('food_items', []) 
+    show_time = Movie.query.get(movie_id).show_time
+    print(show_time-datetime.now())
+    if not (show_time-datetime.now()).total_seconds()>1800:
+        return jsonify({'message': 'Booking closed.'})
     total_seats = len(loads(Screen.query.get(Movie.query.get(movie_id).screen_id).seats))
     booked_seats_count = len(loads(Movie.query.get(movie_id).booked_seats))
     if total_seats - booked_seats_count < seats_requested:
