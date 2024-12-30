@@ -75,7 +75,7 @@ Movie-Ticket-Booking/
 ```
 ## 🗂️ Database Structure
 
-![Database Structure](https://github.com/[Aakarsh-Kumar]/[Movie-Ticket-Booking]/blob/[main]/SQLAlchemy_Database_Flowchart.png?raw=true)
+!Database Structure(https://github.com/Aakarsh-Kumar/Movie-Ticket-Booking/blob/main/SQLAlchemy_Database_Flowchart.png?raw=true)
 
 ---  
 
