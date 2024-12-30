@@ -73,9 +73,10 @@ Movie-Ticket-Booking/
 ├── postman/                              # Postman Collection for API Testing
 └── README.md                             # Project Documentation
 ```
-## 🗂️ Database Structure
+## 🛢 Database Structure
 
-!Database Structure(https://github.com/Aakarsh-Kumar/Movie-Ticket-Booking/blob/main/SQLAlchemy_Database_Flowchart.png?raw=true)
+![Database Structure](https://raw.githubusercontent.com/Aakarsh-Kumar/Movie-Ticket-Booking/refs/heads/main/SQLAlchemy_Database_Flowchart.png)
+
 
 ---  
 
