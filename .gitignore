@@ -5,4 +5,4 @@ app/routes/__pycache__
 instance/*
 migrations/*
 __pycache__
-config.py
+*.env
