@@ -1,0 +1,41 @@
+{
+	"info": {
+		"_postman_id": "c6528ff8-5451-4f68-aa99-822f13a47af5",
+		"name": "deletion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38032109"
+	},
+	"item": [
+		{
+			"name": "cancel_booking",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"booking_id\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/cancel-booking",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"cancel-booking"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
