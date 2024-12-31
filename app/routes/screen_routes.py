@@ -7,15 +7,21 @@ screen_routes = Blueprint('screen_routes', __name__)
 @screen_routes.route('/screen/<int:id>', methods=['GET'])
 def get_screens():
     screens = Screen.query().filter_by(theater_id=id).all()
-    print(screens)
+    return jsonify([{
+        'id': screen.id,
+        'type': screen.type,
+        'price': screen.price,
+        'seats': loads(screen.seats),
+        'theater_id': screen.theater_id
+    } for screen in screens])
 
-@screen_routes.route('/screen/<int:id>', methods=['POST'])
-def add_screen(id):
+@screen_routes.route('/screen', methods=['POST'])
+def add_screen():
     data = request.json
     type = data.get('type')
     price = data.get('price')
     seats = dumps([seat for seat in range(1,data.get('seats')+1)])
-    theater_id = id
+    theater_id = data.get('theater_id')
     new_screen = Screen(type=type, price=price, seats=seats, theater_id=theater_id)
     db.session.add(new_screen)
     db.session.commit()
