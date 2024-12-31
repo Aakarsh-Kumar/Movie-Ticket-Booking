@@ -41,15 +41,16 @@ An efficient and user-friendly ticket booking system for theatres, built using F
    ```
    pip install -r requirements.txt
    ```
+   
+4. Configure your `.env` file with necessary environment variables like database uri and secret keys.
 
-4. Set up the database:
+5. Set up the database:
    ```
    flask db init
    flask db migrate
    flask db upgrade
    ```
 
-5. Configure your `.env` file with necessary environment variables like database uri and secret keys.
 
 ## 🗂️ Project Structure
 ```
